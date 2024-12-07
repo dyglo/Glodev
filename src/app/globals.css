@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-rgb: 0, 0, 0;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
+}
+
+/* Statistics background pattern */
+.stats-pattern {
+  background-size: 3em 3em;
+  background-image: linear-gradient(30deg, #2dd4bf 12%, transparent 12.5%, transparent 87.5%, #2dd4bf 87.5%, #2dd4bf);
+}
