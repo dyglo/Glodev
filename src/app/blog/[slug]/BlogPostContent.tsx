@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { format } from 'date-fns';
@@ -39,7 +38,7 @@ export default function BlogPostContent({ post }: Props) {
           <div className="flex items-center text-gray-400 mb-8">
             <span>{format(new Date(post.publishDate), 'MMMM d, yyyy')}</span>
             <span className="mx-2">•</span>
-            <span>{post.author.name}</span>
+            <span>{post.readTime} min read</span>
           </div>
 
           {post.imageUrl && (
