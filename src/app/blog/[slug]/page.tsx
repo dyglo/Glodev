@@ -1,109 +1,106 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import Comments from '@/components/Comments';
-import SocialShare from '@/components/SocialShare';
-import UploadButton from '@/components/UploadButton';
-import { useParams } from 'next/navigation';
+import Link from 'next/link';
+import { format } from 'date-fns';
+import { ArrowLeft } from 'lucide-react';
+import { motion } from 'framer-motion';
+
 import PageWrapper from '@/components/PageWrapper';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { BlogPost } from '@/types/blog';
 import { mockPosts } from '../mockData';
 
+interface Props {
+  params: {
+    slug: string;
+  };
+}
+
 export const metadata: Metadata = {
   title: 'Blog Post',
   description: 'Blog post page',
 };
 
-export default function BlogPostPage() {
-  const params = useParams();
+export default function BlogPostPage({ params }: Props) {
   const [post, setPost] = useState<BlogPost | null>(null);
 
   useEffect(() => {
-    // In a real app, this would be an API call
-    const foundPost = mockPosts.find(p => p.slug === params.slug);
-    setPost(foundPost || null);
+    // Find the post with matching slug
+    const foundPost = mockPosts.find((p) => p.slug === params.slug);
+    if (foundPost) {
+      setPost(foundPost);
+    }
   }, [params.slug]);
 
   if (!post) {
-    return (
-      <PageWrapper>
-        <div className="min-h-screen bg-black">
-          <Navbar />
-          <div className="container mx-auto px-4 py-32">
-            <div className="text-center text-gray-400">Post not found</div>
-          </div>
-          <Footer />
-        </div>
-    </PageWrapper>
-    );
+    return notFound();
   }
-
-  const handleImageUpload = (url: string) => {
-    console.log('Image uploaded:', url);
-    // Handle the uploaded image URL
-  };
 
   return (
     <PageWrapper>
-      <div className="min-h-screen bg-black">
-        <Navbar />
-        
-        <article className="container mx-auto px-4 py-32 max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="max-w-4xl mx-auto"
-          >
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-              {post.title}
-            </h1>
+      <Navbar />
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="container mx-auto px-4 py-8"
+      >
+        <Link
+          href="/blog"
+          className="inline-flex items-center text-teal-500 hover:text-teal-600 mb-8"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Blog
+        </Link>
 
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center space-x-4">
-                <span className="text-gray-600 dark:text-gray-400">{post.author.name}</span>
-                <span className="text-gray-400">•</span>
-                <span className="text-gray-600 dark:text-gray-400">
-                  {new Date(post.publishDate).toLocaleDateString()}
-                </span>
-              </div>
-              
-              <SocialShare 
-                url={`https://yourdomain.com/blog/${params.slug}`} 
-                title={post.title} 
+        <article className="prose prose-invert max-w-none">
+          <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
+          <div className="flex items-center text-gray-400 mb-8">
+            <span>{format(new Date(post.publishDate), 'MMMM d, yyyy')}</span>
+            <span className="mx-2">•</span>
+            <span>{post.author.name}</span>
+          </div>
+
+          {post.imageUrl && (
+            <div className="relative w-full h-[400px] mb-8">
+              <Image
+                src={post.imageUrl}
+                alt={post.title}
+                fill
+                className="object-cover rounded-lg"
               />
             </div>
+          )}
 
-            {post.imageUrl && (
-              <div className="relative w-full h-96 mb-8">
-                <Image
-                  src={post.imageUrl}
-                  alt={post.title}
-                  fill
-                  className="object-cover rounded-lg"
-                />
-              </div>
-            )}
-
-            <div className="prose dark:prose-invert max-w-none mb-12">
-              {post.content || post.excerpt}
-            </div>
-
-            {/* Image Upload Section (for admins only) */}
-            <div className="mb-8">
-              <h3 className="text-xl font-semibold mb-4">Add Images</h3>
-              <UploadButton onUploadComplete={handleImageUpload} />
-            </div>
-
-            {/* Comments Section */}
-            <Comments postId={params.slug} />
-          </motion.div>
+          <div
+            className="prose prose-invert max-w-none"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
         </article>
 
-        <Footer />
-      </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mt-12"
+        >
+          <h2 className="text-2xl font-bold mb-4">Share this post</h2>
+          <div className="flex space-x-4">
+            <button className="text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded">
+              Share on Twitter
+            </button>
+            <button className="text-white bg-blue-800 hover:bg-blue-900 px-4 py-2 rounded">
+              Share on LinkedIn
+            </button>
+          </div>
+        </motion.div>
+      </motion.div>
+      <Footer />
     </PageWrapper>
   );
 }

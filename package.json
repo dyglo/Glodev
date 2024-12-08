@@ -9,13 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.7.4",
     "@hookform/resolvers": "^3.9.1",
+    "@prisma/client": "^6.0.1",
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/supabase-js": "^2.47.2",
     "@tabler/icons-react": "^3.24.0",
     "@uploadthing/react": "^7.1.2",
     "@vercel/postgres": "^0.10.0",
+    "date-fns": "^4.1.0",
     "framer-motion": "^11.13.1",
+    "lucide-react": "^0.468.0",
     "next": "^14.2.20",
     "next-auth": "^4.24.11",
     "react": "^18.2.0",

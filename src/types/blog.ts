@@ -1,19 +1,18 @@
+export interface Author {
+  name: string;
+  image?: string;
+}
+
 export interface BlogPost {
   id: string;
   title: string;
-  excerpt: string;
-  content: string;
-  author: {
-    name: string;
-    avatar: string;
-    role: string;
-  };
-  category: string;
-  tags: string[];
-  publishDate: string;
-  readTime: number;
-  imageUrl: string;
   slug: string;
+  content: string;
+  excerpt: string;
+  publishDate: string;
+  author: Author;
+  imageUrl?: string;
+  readTime?: number;
 }
 
 export interface BlogCategory {
