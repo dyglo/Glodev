@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
-import prisma from "@/lib/prisma";
-import { authOptions } from "../../auth/auth.config";
+import { getBlogPosts } from "@/lib/blog";
+import { authOptions } from "@/lib/auth";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -10,44 +10,14 @@ export async function GET(request: Request) {
   const category = searchParams.get("category");
   const search = searchParams.get("search");
 
-  const where = {
-    published: true,
-    ...(category && { categoryId: category }),
-    ...(search && {
-      OR: [
-        { title: { contains: search, mode: "insensitive" } },
-        { excerpt: { contains: search, mode: "insensitive" } },
-      ],
-    }),
-  };
-
-  const [posts, total] = await Promise.all([
-    prisma.post.findMany({
-      where,
-      include: {
-        author: {
-          select: {
-            name: true,
-            image: true,
-          },
-        },
-        category: true,
-        tags: true,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-      skip: (page - 1) * limit,
-      take: limit,
-    }),
-    prisma.post.count({ where }),
-  ]);
-
-  return NextResponse.json({
-    posts,
-    total,
-    totalPages: Math.ceil(total / limit),
+  const result = await getBlogPosts({
+    page,
+    limit,
+    category: category || undefined,
+    search: search || undefined,
   });
+
+  return NextResponse.json(result);
 }
 
 export async function POST(request: Request) {

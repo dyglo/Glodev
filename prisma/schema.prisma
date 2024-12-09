@@ -19,4 +19,19 @@ model User {
   name          String?
   email         String?   @unique
   role          String    @default("user")
+  posts         Post[]
+}
+
+model Post {
+  id          String    @id @default(cuid())
+  title       String
+  slug        String    @unique
+  content     String
+  excerpt     String
+  publishDate DateTime  @default(now())
+  imageUrl    String?
+  readTime    Int?
+  category    String?
+  author      User      @relation(fields: [authorId], references: [id])
+  authorId    String
 }

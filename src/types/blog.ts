@@ -1,6 +1,8 @@
 export interface Author {
   name: string;
   image?: string;
+  avatar?: string;
+  role?: string;
 }
 
 export interface BlogPost {
@@ -13,6 +15,8 @@ export interface BlogPost {
   author: Author;
   imageUrl?: string;
   readTime?: number;
+  category?: string;
+  published?: boolean;
 }
 
 export interface BlogCategory {
@@ -25,4 +29,10 @@ export interface BlogTag {
   name: string;
   slug: string;
   count: number;
+}
+
+export interface BlogResponse {
+  posts: BlogPost[];
+  total: number;
+  totalPages: number;
 }
