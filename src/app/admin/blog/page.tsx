@@ -10,18 +10,6 @@ import PageWrapper from '@/components/PageWrapper';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
-// Extend the default Session type
-declare module 'next-auth' {
-  interface Session {
-    user: {
-      name?: string | null;
-      email?: string | null;
-      image?: string | null;
-      role?: string;
-    };
-  }
-}
-
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
   loading: () => <p>Loading editor...</p>,
