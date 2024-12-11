@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { getBlogPosts } from "@/lib/blog";
 import { authOptions } from "@/lib/auth";
+import { BlogPost } from "@/types/blog";
+
+// Mock posts array to store new posts (in memory only)
+let mockPosts: BlogPost[] = [];
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -35,35 +39,25 @@ export async function POST(request: Request) {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)+/g, "");
 
-  const post = await prisma.post.create({
-    data: {
-      title,
-      slug,
-      content,
-      excerpt,
-      imageUrl,
-      published: true,
-      author: {
-        connect: { id: session.user.id },
-      },
-      category: {
-        connect: { id: categoryId },
-      },
-      tags: {
-        connect: tags.map((tagId: string) => ({ id: tagId })),
-      },
-    },
-    include: {
-      author: {
-        select: {
-          name: true,
-          image: true,
-        },
-      },
-      category: true,
-      tags: true,
-    },
-  });
+  // Create a new mock post
+  const newPost: BlogPost = {
+    id: Date.now().toString(), // Generate a simple unique ID
+    title,
+    slug,
+    content,
+    excerpt,
+    imageUrl,
+    publishDate: new Date().toISOString(),
+    category: categoryId,
+    author: {
+      name: session.user.name || "Anonymous",
+      image: session.user.image || undefined,
+      role: session.user.role || "user"
+    }
+  };
 
-  return NextResponse.json(post);
+  // Add to mock posts array
+  mockPosts.push(newPost);
+
+  return NextResponse.json(newPost);
 }
