@@ -1,6 +1,7 @@
 import { IconCode, IconPalette, IconDeviceMobile, IconBrandWordpress, IconServer, IconBrandGoogleAnalytics } from '@tabler/icons-react';
+import { Services } from '@/types/services';
 
-export const services = {
+export const services: Services = {
   coreServices: [
     {
       id: 1,
