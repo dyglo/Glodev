@@ -150,7 +150,7 @@ export default function AdminBlog() {
                   type="url"
                   value={imageUrl}
                   onChange={(e) => setImageUrl(e.target.value)}
-                  placeholder="public/blog/nextjs-cover.jpg"
+                  placeholder="Enter image URL"
                   aria-label="Image URL"
                   className="w-full p-2 border border-gray-300 rounded"
                 />
