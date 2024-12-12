@@ -9,6 +9,7 @@ import { Session } from 'next-auth';
 import PageWrapper from '@/components/PageWrapper';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import Loading from '@/components/Loading';
 
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
@@ -18,33 +19,9 @@ const ReactQuill = dynamic(() => import('react-quill'), {
 import 'react-quill/dist/quill.snow.css';
 
 export default function AdminBlog() {
-  const router = useRouter();
-  const [isClient, setIsClient] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const { data: session, status } = useSession();
-
-  useEffect(() => {
-    setIsClient(true);
-    if (status !== 'loading') {
-      setIsLoading(false);
-      if (!session || session.user?.role !== 'admin') {
-        router.push('/auth/signin');
-      }
-    }
-  }, [session, status, router]);
-
-  if (!isClient || isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-teal-500"></div>
-      </div>
-    );
-  }
-
-  if (!session || session.user?.role !== 'admin') {
-    return null;
-  }
-
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [excerpt, setExcerpt] = useState('');
@@ -52,6 +29,25 @@ export default function AdminBlog() {
   const [tags, setTags] = useState<string[]>([]);
   const [imageUrl, setImageUrl] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (status === 'loading') return;
+    
+    if (!session) {
+      router.push('/auth/signin');
+      return;
+    }
+    
+    setIsLoading(false);
+  }, [session, status, router]);
+
+  if (status === 'loading' || isLoading) {
+    return <Loading />;
+  }
+
+  if (!session) {
+    return null;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
