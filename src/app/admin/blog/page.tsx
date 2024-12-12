@@ -19,29 +19,21 @@ import 'react-quill/dist/quill.snow.css';
 
 export default function AdminBlog() {
   const router = useRouter();
-  const { data: session, status } = useSession({
-    required: true,
-    onUnauthenticated() {
-      router.push('/auth/signin');
-    },
-  });
-  
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [excerpt, setExcerpt] = useState('');
-  const [category, setCategory] = useState('');
-  const [tags, setTags] = useState<string[]>([]);
-  const [imageUrl, setImageUrl] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const { data: session, status } = useSession();
 
   useEffect(() => {
-    if (status === 'loading') return;
-    if (session?.user?.role !== 'admin') {
-      router.push('/auth/signin');
+    setIsClient(true);
+    if (status !== 'loading') {
+      setIsLoading(false);
+      if (!session || session.user?.role !== 'admin') {
+        router.push('/auth/signin');
+      }
     }
   }, [session, status, router]);
 
-  if (status === 'loading') {
+  if (!isClient || isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-teal-500"></div>
@@ -52,6 +44,14 @@ export default function AdminBlog() {
   if (!session || session.user?.role !== 'admin') {
     return null;
   }
+
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [excerpt, setExcerpt] = useState('');
+  const [category, setCategory] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
+  const [imageUrl, setImageUrl] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
