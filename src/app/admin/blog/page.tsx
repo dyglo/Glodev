@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import { useSession } from 'next-auth/react';
@@ -18,7 +18,7 @@ const ReactQuill = dynamic(() => import('react-quill'), {
 import 'react-quill/dist/quill.snow.css';
 
 export default function AdminBlog() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -28,12 +28,18 @@ export default function AdminBlog() {
   const [imageUrl, setImageUrl] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  if (!session) {
+  useEffect(() => {
+    if (status === 'loading') return;
+    if (!session || session.user?.role !== 'admin') {
+      router.push('/auth/signin');
+    }
+  }, [session, status, router]);
+
+  if (status === 'loading') {
     return <div>Loading...</div>;
   }
 
-  if (!session.user || session.user.role !== 'admin') {
-    router.push('/auth/signin');
+  if (!session || session.user?.role !== 'admin') {
     return null;
   }
 

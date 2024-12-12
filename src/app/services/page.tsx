@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { IconArrowUp } from '@tabler/icons-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import ServiceDetails from '@/components/services/ServiceDetails';
@@ -129,6 +129,16 @@ const HeroSection = () => {
 };
 
 const ServicesGrid = () => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null;
+  }
+
   return (
     <section className="py-20 bg-black relative overflow-hidden">
       <div className="container mx-auto px-4">
@@ -246,16 +256,26 @@ const ProcessTimeline = () => {
 };
 
 const TechStack = () => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null;
+  }
+
   return (
-    <section className="py-20 bg-black">
+    <section className="py-20 bg-gray-900">
       <div className="container mx-auto px-4">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-4xl md:text-5xl font-bold text-center mb-16"
+          className="text-4xl font-bold text-center mb-16"
         >
-          Our Technology Stack
+          Our Tech Stack
         </motion.h2>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
@@ -266,19 +286,18 @@ const TechStack = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              whileHover={{ scale: 1.05 }}
-              className="flex flex-col items-center p-6 bg-gradient-to-br from-gray-900 to-black rounded-xl hover:shadow-lg hover:shadow-teal-500/10 transition-all duration-300"
+              className="bg-black p-6 rounded-xl text-center hover:bg-gray-800 transition-colors"
             >
-              <div className="w-16 h-16 mb-4 relative">
+              <div className="relative w-16 h-16 mx-auto mb-4">
                 <Image
                   src={tech.icon}
                   alt={tech.name}
-                  width={64}
-                  height={64}
+                  fill
                   className="object-contain"
                 />
               </div>
-              <h3 className="text-xl font-semibold text-white">{tech.name}</h3>
+              <h3 className="text-xl font-semibold mb-2">{tech.name}</h3>
+              <p className="text-gray-400">{tech.description}</p>
             </motion.div>
           ))}
         </div>
