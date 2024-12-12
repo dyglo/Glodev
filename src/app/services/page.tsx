@@ -7,7 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import ServiceDetails from '@/components/services/ServiceDetails';
 import { services } from '@/data/services';
-import { TechStackItem } from '@/types/services';
+import type { TechStackItem } from '@/types/services';
 
 // Navbar Component
 const Navbar = () => {
@@ -280,7 +280,7 @@ const TechStack = () => {
         </motion.h2>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
-          {services.techStack.map((tech: TechStackItem, index) => (
+          {(services.techStack as TechStackItem[]).map((tech, index) => (
             <motion.div
               key={tech.name}
               initial={{ opacity: 0, y: 20 }}

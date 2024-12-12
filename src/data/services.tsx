@@ -1,5 +1,53 @@
 import { IconCode, IconPalette, IconDeviceMobile, IconBrandWordpress, IconServer, IconBrandGoogleAnalytics } from '@tabler/icons-react';
-import { Services } from '@/types/services';
+import type { Services, TechStackItem } from '@/types/services';
+
+const techStack: TechStackItem[] = [
+  {
+    name: "React",
+    icon: "/icons/react.svg",
+    description: "Frontend Development"
+  },
+  {
+    name: "Next.js",
+    icon: "/icons/nextjs.svg",
+    description: "Full-stack Framework"
+  },
+  {
+    name: "TypeScript",
+    icon: "/icons/typescript.svg",
+    description: "Type-safe JavaScript"
+  },
+  {
+    name: "Node.js",
+    icon: "/icons/nodejs.svg",
+    description: "Backend Runtime"
+  },
+  {
+    name: "TailwindCSS",
+    icon: "/icons/tailwind.svg",
+    description: "Utility-first CSS"
+  },
+  {
+    name: "PostgreSQL",
+    icon: "/icons/postgresql.svg",
+    description: "Database"
+  },
+  {
+    name: "MongoDB",
+    icon: "/icons/mongodb.svg",
+    description: "NoSQL Database"
+  },
+  {
+    name: "Python",
+    icon: "/icons/python.svg",
+    description: "Backend Development"
+  },
+  {
+    name: "AWS",
+    icon: "/icons/aws.svg",
+    description: "Cloud Infrastructure"
+  }
+];
 
 export const services: Services = {
   coreServices: [
@@ -46,51 +94,5 @@ export const services: Services = {
       features: ["SEO", "Analytics", "Social Media", "Content Strategy"]
     }
   ],
-  techStack: [
-    {
-      name: "React",
-      icon: "/icons/react.svg",
-      description: "Frontend Development"
-    },
-    {
-      name: "Next.js",
-      icon: "/icons/nextjs.svg",
-      description: "Full-stack Framework"
-    },
-    {
-      name: "TypeScript",
-      icon: "/icons/typescript.svg",
-      description: "Type-safe JavaScript"
-    },
-    {
-      name: "Node.js",
-      icon: "/icons/nodejs.svg",
-      description: "Backend Runtime"
-    },
-    {
-      name: "TailwindCSS",
-      icon: "/icons/tailwind.svg",
-      description: "Utility-first CSS"
-    },
-    {
-      name: "PostgreSQL",
-      icon: "/icons/postgresql.svg",
-      description: "Database"
-    },
-    {
-      name: "MongoDB",
-      icon: "/icons/mongodb.svg",
-      description: "NoSQL Database"
-    },
-    {
-      name: "Python",
-      icon: "/icons/python.svg",
-      description: "Backend Development"
-    },
-    {
-      name: "AWS",
-      icon: "/icons/aws.svg",
-      description: "Cloud Infrastructure"
-    }
-  ]
+  techStack
 };
