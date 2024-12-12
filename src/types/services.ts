@@ -8,11 +8,11 @@ export interface CoreService {
   features: string[];
 }
 
-export interface TechStackItem {
+export type TechStackItem = {
   name: string;
   icon: string;
   description: string;
-}
+};
 
 export interface Services {
   coreServices: CoreService[];
